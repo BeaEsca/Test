@@ -1,2 +1,3 @@
-# Genomic_variant-analysis
-Es una prueba para aprender a usarlo
+# Genomic variant analysis
+## Unexpected results
+Tras analizar los resultados se observa algo que **no esperaba**.
