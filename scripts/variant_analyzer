@@ -1,0 +1,44 @@
+import os
+
+def load_vcf(filepath):
+    """Carga y devuelve las líneas de datos del archivo VCF."""
+    print(f"--- Cargando archivo: {filepath} ---")
+    data_lines = []
+    try:
+        with open(filepath, 'r') as f:
+            for line in f:
+                # Ignorar líneas de cabecera que comienzan con '#'
+                if not line.startswith('#'):
+                    data_lines.append(line.strip().split('\t'))
+        print(f"Cargadas {len(data_lines)} líneas de variantes.")
+        return data_lines
+    except FileNotFoundError:
+        print(f"ERROR: Archivo no encontrado en {filepath}")
+        return []
+
+def analyze_variants(variants):
+    """Cuenta el número de variantes SNP y los cromosomas únicos."""
+    if not variants:
+        return
+        
+    chromosomes = set()
+    snps_count = 0
+    
+    # El formato VCF tiene el cromosoma en la columna 0 (CHROM)
+    for variant in variants:
+        chromosomes.add(variant[0])
+        # Una variante es un SNP si REF y ALT tienen una sola base (longitud 1)
+        if len(variant[3]) == 1 and len(variant[4]) == 1:
+            snps_count += 1
+            
+    print("\n--- Resultados del Análisis ---")
+    print(f"Cromosomas únicos encontrados: {len(chromosomes)}")
+    print(f"Total de SNPs (Single Nucleotide Polymorphisms): {snps_count}")
+
+if __name__ == "__main__":
+    # Definir la ruta relativa al archivo VCF
+    vcf_path = os.path.join('data', 'sample.vcf')
+    
+    # Ejecutar el flujo de trabajo
+    variant_data = load_vcf(vcf_path)
+    analyze_variants(variant_data)
